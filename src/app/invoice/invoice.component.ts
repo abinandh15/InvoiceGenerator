@@ -12,6 +12,9 @@ export class InvoiceComponent implements OnInit {
   invoiceHeaderForm : FormGroup;
   invoiceDate: number = Date.now();
   subtotal:number = 0;
+  fileData: File = null;
+  previewUrl:any = null;
+  uploadedFilePath: string = null;
 
 
   constructor(private fb: FormBuilder, private datePipe:DatePipe) { }
@@ -84,5 +87,25 @@ export class InvoiceComponent implements OnInit {
  deleteListItem(i){
    this.invoiceListForms.removeAt(i);
   }
+
+  public getFileURL(event){
+    this.fileData = <File>event.target.files[0];
+    console.log(event);
+    this.preview();
+  }
+
+  preview() {
+    // Show preview 
+    var mimeType = this.fileData.type;
+    if (mimeType.match(/image\/*/) == null) {
+      return;
+    }
+ 
+    var reader = new FileReader();      
+    reader.readAsDataURL(this.fileData); 
+    reader.onload = (_event) => { 
+      this.previewUrl = reader.result; 
+    }
+}
 
 }
